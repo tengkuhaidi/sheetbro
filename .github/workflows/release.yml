@@ -50,9 +50,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tagName: v__VERSION__ # will use version from tauri.conf.json
-          releaseName: 'SheetBro v__VERSION__'
+          tagName: v0.1.0
+          releaseName: 'SheetBro v0.1.0'
           releaseBody: 'See the assets to download this version and install.'
-          releaseDraft: true
+          releaseDraft: false
           prerelease: false
           args: ${{ matrix.args }}
