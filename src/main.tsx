@@ -7,6 +7,11 @@ import "@fontsource/ibm-plex-mono/400.css";
 import "./styles.css";
 import { App } from "./App";
 
+// Tag non-mac environments (Windows / Linux) to hide mac-specific traffic light gutters
+if (!navigator.userAgent.includes("Mac")) {
+  document.body.classList.add("not-mac");
+}
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <App />

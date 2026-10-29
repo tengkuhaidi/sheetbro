@@ -40,7 +40,7 @@ button { font-family: inherit; font-size: inherit; color: inherit; }
   height: 100%;
 }
 
-/* ---- title bar (traffic lights sit on top of the left gutter) */
+/* ---- title bar (traffic lights sit on top of the left gutter on macOS) */
 .titlebar {
   display: flex;
   align-items: center;
@@ -49,6 +49,8 @@ button { font-family: inherit; font-size: inherit; color: inherit; }
   border-bottom: 1px solid var(--border);
 }
 .titlebar-lights { width: 86px; height: 100%; flex: none; }
+body.not-mac .titlebar { padding-left: 14px; }
+body.not-mac .titlebar-lights { display: none; }
 .app-icon { width: 28px; height: 28px; flex: none; }
 /* clicks must land on the div itself for the drag region to work */
 .app-icon svg { display: block; pointer-events: none; }

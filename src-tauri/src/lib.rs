@@ -908,6 +908,7 @@ fn build_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<Menu<R>> {
     let item = |id: &str, text: &str, accel: &str| {
         MenuItemBuilder::with_id(id, text).accelerator(accel).build(app)
     };
+    #[cfg(target_os = "macos")]
     let app_menu = SubmenuBuilder::new(app, "SheetBro")
         .about(None)
         .separator()
@@ -954,7 +955,12 @@ fn build_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<Menu<R>> {
         .minimize()
         .maximize()
         .build()?;
-    Menu::with_items(app, &[&app_menu, &file, &edit, &format, &window])
+
+    #[cfg(target_os = "macos")]
+    return Menu::with_items(app, &[&app_menu, &file, &edit, &format, &window]);
+
+    #[cfg(not(target_os = "macos"))]
+    return Menu::with_items(app, &[&file, &edit, &format, &window]);
 }
 
 /// Entry point of `--mcp-stdio`: relays MCP messages between stdin/stdout and the running app.
@@ -979,6 +985,28 @@ pub fn run() {
         .setup(|app| {
             app.set_menu(build_menu(app.handle())?)?;
             mcp::autostart(app.handle());
+
+            // Handle file arguments passed on Windows / Linux (e.g. "Open With" or double click)
+            #[cfg(not(target_os = "macos"))]
+            {
+                use tauri::Manager;
+                let args: Vec<String> = std::env::args().skip(1).collect();
+                for arg in args {
+                    if !arg.starts_with('-') {
+                        let path = std::path::Path::new(&arg);
+                        if path.exists() {
+                            let path_str = path.to_string_lossy().to_string();
+                            app.state::<AppState>()
+                                .pending_open
+                                .lock()
+                                .unwrap()
+                                .push(path_str.clone());
+                            let _ = app.emit("open-file", path_str);
+                        }
+                    }
+                }
+            }
+
             Ok(())
         })
         .on_menu_event(|app, event| {

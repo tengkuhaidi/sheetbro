@@ -1,6 +1,6 @@
 # SheetBro
 
-A fast, native spreadsheet app for macOS that your AI assistant can work in.
+A fast, native spreadsheet app for macOS and Windows that your AI assistant can work in.
 
 SheetBro opens and saves Excel (`.xlsx`) and CSV files, calculates formulas with
 [IronCalc](https://github.com/ironcalc/IronCalc), and runs a built-in
@@ -74,10 +74,11 @@ claude mcp add --transport http sheetbro http://127.0.0.1:7424/mcp \
 
 Requirements:
 
-- macOS 11 or later
+- macOS 11 or later, or Windows 10/11 (x64)
 - [Rust](https://rustup.rs) (stable)
 - [Node.js](https://nodejs.org) 20.19+ or 22.12+ and [pnpm](https://pnpm.io)
-- Xcode Command Line Tools (`xcode-select --install`)
+- On macOS: Xcode Command Line Tools (`xcode-select --install`)
+- On Windows: Visual Studio C++ Build Tools & WebView2
 
 ```sh
 git clone https://github.com/jetorbitdev/sheetbro.git
@@ -85,7 +86,7 @@ cd sheetbro
 pnpm install
 
 pnpm tauri dev      # run in development mode
-pnpm tauri build    # build SheetBro.app and a .dmg into src-tauri/target/release/bundle
+pnpm tauri build    # build release bundle (.dmg on macOS, .exe/.msi on Windows)
 ```
 
 ## Project structure
